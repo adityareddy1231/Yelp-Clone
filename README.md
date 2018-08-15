@@ -1,2 +1,2 @@
-# Yelp-Clone
-A yelp.com clone but for campers!
+# Zorro's-Yelp
+A yelp.com clone but for pets!
