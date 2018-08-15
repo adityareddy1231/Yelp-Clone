@@ -1,0 +1,24 @@
+{
+  "name": "yelp-clone",
+  "version": "1.0.0",
+  "description": "Yelp Clone v1",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adityareddy1231/Yelp-Clone.git"
+  },
+  "author": "Aditya Reddy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adityareddy1231/Yelp-Clone/issues"
+  },
+  "homepage": "https://github.com/adityareddy1231/Yelp-Clone#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3"
+  }
+}
