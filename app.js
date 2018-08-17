@@ -1,62 +1,84 @@
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var dogFriendlyPlaces = [{
-    name: "Salmon Creek",
-    image: "https://farm3.staticflickr.com/2116/2164766085_0229ac3f08.jpg"
-  },
-  {
-    name: "Yosemite National",
-    image: "https://farm8.staticflickr.com/7272/7700546096_f39d724392.jpg"
-  },
-  {
-    name: "Horsetooth Reservoir",
-    image: "https://farm3.staticflickr.com/2931/14128269785_f27fb630f3.jpg"
-  },
-  {
-      name: "Salmon Creek",
-      image: "https://farm3.staticflickr.com/2116/2164766085_0229ac3f08.jpg"
-    },
-    {
-      name: "Yosemite National",
-      image: "https://farm8.staticflickr.com/7272/7700546096_f39d724392.jpg"
-    },
-    {
-      name: "Horsetooth Reservoir",
-      image: "https://farm3.staticflickr.com/2931/14128269785_f27fb630f3.jpg"
-    }
-];
+var express = require("express"),
+  app = express(),
+  bodyParser = require("body-parser"),
+  mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost/zorros-yelp");
+
+var placeSchema = new mongoose.Schema({
+  name: String,
+  image: String,
+  description: String
+});
+
+var place = mongoose.model("Place", placeSchema);
 
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+//Setting default template to ejs.
 app.set("view engine", "ejs");
 
+//HomePage - Main Landing Page
 app.get("/", function(req, res) {
   res.render("landing");
 });
 
-app.get("/friendly-places", function(req, res) {
-  res.render("friendly-places", {
-    dogFriendlyPlaces: dogFriendlyPlaces
+//INDEX - Show all places.
+app.get("/places", function(req, res) {
+  place.find({}, function(err, allPlaces) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("index", {
+        places: allPlaces
+      });
+    }
   });
 });
 
-app.get("/friendly-places/new", function(req, res) {
+//NEW - Show form to create new place.
+app.get("/places/new", function(req, res) {
   res.render("new");
 });
 
-app.post("/friendly-places", function(req, res) {
+//CREATE - Add new place to database.
+app.post("/places", function(req, res) {
+
+  //Getting data from form.
   var friendlyPlaceName = req.body.name;
   var friendlyPlaceImage = req.body.image;
+  var friendlyPlaceDescription = req.body.description;
   var newFriendlyPlace = {
     name: friendlyPlaceName,
-    image: friendlyPlaceImage
+    image: friendlyPlaceImage,
+    description: friendlyPlaceDescription
   };
-  dogFriendlyPlaces.push(newFriendlyPlace);
-  res.redirect("/friendly-places");
+
+  //Passing data to database.
+  place.create(newFriendlyPlace, function(err, justCreatedPlace) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/places");
+    }
+  });
 });
 
+//SHOW - Shows more info about one place.
+app.get("/places/:id", function(req, res) {
+  //find place by id
+  place.findById(req.params.id, function(err, foundPlace) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.render("show", { place: foundPlace });
+      }
+  });
+});
+
+//Start server on a port on locahost
 app.listen(1337, "127.0.0.1", function() {
   console.log("Zorro's yelp server has started!");
 });
