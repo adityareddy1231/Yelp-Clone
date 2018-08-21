@@ -1,0 +1,22 @@
+<% include ../partials/header %>
+<div class="container">
+  <div class="row">
+    <h1 style="text-align: center;"> Add a new comment to <%= place.name %></h1>
+    <div style="width: 45%; margin: 25px auto; text-align: center;">
+      <form action="/places/<%= place._id %>/comments" method="POST">
+        <div class="form-group">
+          <input class="form-control" type="text" placeholder="Comment..." name="comment[text]">
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="text" placeholder="Author..." name="comment[author]">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-lg btn-primary btn-block">Submit</button>
+        </div>
+      </form>
+      <a href="/places">Back to all dog friendly places</a><br><br>
+    </div>
+  </div>
+  <br><br>
+</div>
+<% include ../partials/footer %>

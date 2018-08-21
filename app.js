@@ -3,7 +3,8 @@ var express = require("express"),
   bodyParser = require("body-parser"),
   mongoose = require("mongoose"),
   Place = require('./models/places'),
-  seedDB = require('./seeds');
+  seedDB = require('./seeds'),
+  Comment = require('./models/comments');
 
 mongoose.connect("mongodb://localhost/zorros-yelp");
 
@@ -28,7 +29,7 @@ app.get("/places", function(req, res) {
     if (err) {
       console.log(err);
     } else {
-      res.render("index", {
+      res.render("places/index", {
         places: allPlaces
       });
     }
@@ -37,7 +38,7 @@ app.get("/places", function(req, res) {
 
 //NEW - Show form to create new place.
 app.get("/places/new", function(req, res) {
-  res.render("new");
+  res.render("places/new");
 });
 
 //CREATE - Add new place to database.
@@ -66,14 +67,47 @@ app.post("/places", function(req, res) {
 
 //SHOW - Shows more info about one place.
 app.get("/places/:id", function(req, res) {
-
   //find place by id and populate comments
   Place.findById(req.params.id).populate("comments").exec(function(err, foundPlace) {
       if (err) {
         console.log(err);
       } else {
-        res.render("show", { place: foundPlace });
+        res.render("places/show", { place: foundPlace });
       }
+  });
+});
+
+//Nested NEW route - add new comment for a particular place form
+app.get("/places/:id/comments/new", function(req, res) {
+  //find places
+  Place.findById(req.params.id, function(err, place){
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("comments/new", { place: place});
+    }
+  });
+});
+
+app.post("/places/:id/comments", function(req, res) {
+  //Getting data from form.
+  var comment = req.body.comment;
+  //finding place
+  Place.findById(req.params.id, function(err, place){
+    if (err) {
+      console.log(err);
+    } else {
+      //adding comment and saving it
+      Comment.create(comment, function(err, createdComment) {
+        if (err) {
+          console.log(error);
+        } else {
+          place.comments.push(createdComment);
+          place.save();
+          res.redirect("/places/" + place._id);
+        }
+      });
+    }
   });
 });
 
