@@ -1,17 +1,11 @@
 var express = require("express"),
   app = express(),
   bodyParser = require("body-parser"),
-  mongoose = require("mongoose");
+  mongoose = require("mongoose"),
+  Place = require('./models/places'),
+  seedDB = require('./seeds');
 
 mongoose.connect("mongodb://localhost/zorros-yelp");
-
-var placeSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String
-});
-
-var place = mongoose.model("Place", placeSchema);
 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -20,6 +14,9 @@ app.use(bodyParser.urlencoded({
 //Setting default template to ejs.
 app.set("view engine", "ejs");
 
+//seeding the database
+seedDB();
+
 //HomePage - Main Landing Page
 app.get("/", function(req, res) {
   res.render("landing");
@@ -27,7 +24,7 @@ app.get("/", function(req, res) {
 
 //INDEX - Show all places.
 app.get("/places", function(req, res) {
-  place.find({}, function(err, allPlaces) {
+  Place.find({}, function(err, allPlaces) {
     if (err) {
       console.log(err);
     } else {
@@ -57,19 +54,21 @@ app.post("/places", function(req, res) {
   };
 
   //Passing data to database.
-  place.create(newFriendlyPlace, function(err, justCreatedPlace) {
+  Place.create(newFriendlyPlace, function(err, justCreatedPlace) {
     if (err) {
       console.log(err);
     } else {
       res.redirect("/places");
     }
   });
+
 });
 
 //SHOW - Shows more info about one place.
 app.get("/places/:id", function(req, res) {
-  //find place by id
-  place.findById(req.params.id, function(err, foundPlace) {
+
+  //find place by id and populate comments
+  Place.findById(req.params.id).populate("comments").exec(function(err, foundPlace) {
       if (err) {
         console.log(err);
       } else {
