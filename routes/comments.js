@@ -17,22 +17,20 @@ router.get("/new", checkLoggedIn, function(req, res) {
 
 //comments - create
 router.post("/", checkLoggedIn, function(req, res) {
-  //Getting data from form.
-  var comment = req.body.comment;
   //finding place
   Place.findById(req.params.id, function(err, place){
     if (err) {
       console.log(err);
     } else {
-      Comment.create(comment, function(err, createdComment) {
+      Comment.create(req.body.comment, function(err, createdComment) {
         if (err) {
           console.log(error);
         } else {
           //add username and id to comment
-          comment.author.id = req.user._id;
-          comment.author.username = req.user.username;
+          createdComment.author.id = req.user._id;
+          createdComment.author.username = req.user.username;
           //save comment
-          comment.save();
+          createdComment.save();
           //push comments to the place
           place.comments.push(createdComment);
           //save the place
@@ -43,6 +41,58 @@ router.post("/", checkLoggedIn, function(req, res) {
     }
   });
 });
+
+//comments - show edit page
+router.get("/:commentID/edit", checkCommentOwnership, function(req, res) {
+  Comment.findById(req.params.commentID, function(err, foundComment) {
+    if (err) {
+      res.redirect("back");
+    }  else {
+      res.render("comments/edit", {place_id: req.params.id, comment: foundComment});
+    }
+  });
+});
+
+//comments - put - update database
+router.put("/:commentID", checkCommentOwnership, function (req, res) {
+  Comment.findByIdAndUpdate(req.params.commentID, req.body.comment, function(err, updatedComment) {
+    if (err) {
+      res.redirect("back");
+    }  else {
+      res.redirect("/places/" + req.params.id);
+    }
+  });
+});
+
+//coments - destroy route
+router.delete("/:commentID", checkCommentOwnership, function(req, res) {
+  Comment.findByIdAndRemove(req.params.commentID, function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/places/" + req.params.id);
+    }
+  });
+});
+
+function checkCommentOwnership(req, res, next) {
+  if (req.isAuthenticated()) {
+    Comment.findById(req.params.commentID, function(err, foundComment) {
+      if (err) {
+        res.redirect("back");
+      } else {
+        //check user ownership of comment
+        if (foundComment.author.id.equals(req.user._id)) {
+          next();
+        } else {
+          res.redirect("back");
+        }
+      }
+    });
+  } else {
+    res.redirect("back");
+  }
+}
 
 function checkLoggedIn(req, res, next){
   if (req.isAuthenticated()) {
