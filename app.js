@@ -12,6 +12,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+app.use(express.static(__dirname + "/public"));
+
 //Setting default template to ejs.
 app.set("view engine", "ejs");
 
