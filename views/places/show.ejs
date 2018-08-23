@@ -20,6 +20,15 @@
           <p>
             <%= place.description %>
           </p>
+          <p>
+            <em>Submitted By <%= place.author.username %><em>
+          </p>
+          <% if(currentUser && place.author.id.equals(currentUser._id)) { %>
+          <a href="/places/<%= place.id %>/edit" class="btn btn-xs btn-warning">Edit Place</a>
+          <form action="/places/<%= place.id %>?_method=DELETE" class="deletePlaceForm" method="POST">
+            <button class="btn btn-xs btn-danger">Delete Place</button>
+          </form>
+          <% } %>
         </div>
       </div>
       <div class="well">
@@ -30,7 +39,7 @@
         <% place.comments.forEach(function(comment){ %>
           <div class="row">
             <div class="col-md-12">
-              <strong><%= comment.author %></strong>
+              <strong><%= comment.author.username %></strong>
               <span class="pull-right">10 days ago</span>
               <p>
                 <%= comment.text %>

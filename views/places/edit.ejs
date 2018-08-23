@@ -1,0 +1,25 @@
+<% include ../partials/header %>
+  <div class="container">
+    <div class="row">
+      <h1 style="text-align: center;"> Edit - <%= place.name %></h1>
+      <div style="width: 45%; margin: 25px auto; text-align: center;">
+        <form action="/places/<%= place._id %>?_method=PUT" method="POST">
+          <div class="form-group">
+            <input class="form-control" type="text" name="place[name]" value="<%= place.name %>">
+          </div>
+          <div class="form-group">
+            <input class="form-control" type="text" name="place[image]" value="<%= place.image %>">
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" name="place[description]" cols="40" rows="5"><%= place.description %></textarea>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-lg btn-primary btn-block">Submit</button>
+          </div>
+        </form>
+        <a href="/places">Back to all dog friendly places</a><br><br>
+      </div>
+    </div>
+    <br><br>
+  </div>
+  <% include ../partials/footer %>

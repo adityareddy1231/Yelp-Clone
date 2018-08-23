@@ -5,3 +5,8 @@
 .thumbnail.showpage {
   padding: 0;
 }
+
+.deletePlaceForm {
+  display: inline;
+  float: right;
+}
