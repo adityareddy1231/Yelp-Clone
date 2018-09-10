@@ -1,6 +1,37 @@
-<% include ./partials/header %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Zorro's Yelp</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/stylesheets/landing.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript" async></script>
+    </head>
+    <body>
 
-  <h1>Landing Page</h1><br><br>
-  <h1><a href="/places"> View all dog friendly places!</a></h1>
+    <div class="container">
+        <% if(error && error.length > 0){ %>
+            <div class="alert alert-danger" role="alert">
+                <%= error %>
+            </div>
+        <% } %>
+        <% if(success && success.length > 0){ %>s
+            <div class="alert alert-success" role="alert">
+                <%= success %>
+            </div>
+        <% } %>
+    </div>
 
-<% include ./partials/footer %>
+    <div id="landing-header">
+ 		<h1>Welcome to Zorro's Yelp!</h1>
+		<a href="/places" class="btn btn-lg btn-success">View All Dog Friendly Places</a>
+    </div>
+
+    <ul class="slideshow">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+
+<% include partials/footer %>
