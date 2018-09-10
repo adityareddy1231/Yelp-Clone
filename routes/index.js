@@ -10,17 +10,16 @@ router.get("/", function(req, res) {
 
 //show registration form
 router.get("/register", function(req, res) {
-  res.render("register");
+  res.render("register", {page: 'register'});
 });
 
 //handle signup logic
 router.post("/register", function (req, res) {
   var newUser = new User({username: req.body.username});
   User.register(newUser, req.body.password, function(err, user) {
-    if (err) {
-      req.flash("error", err.message);
+    if(err){
       console.log(err);
-      return res.render("register");
+      return res.render("register", {error: err.message});
     }
     passport.authenticate("local")(req, res, function() {
       req.flash("success", "Welcome to Zorro's-Yelp" + user.username);
@@ -31,7 +30,7 @@ router.post("/register", function (req, res) {
 
 //show login form
 router.get("/login", function(req, res) {
-  res.render("login");
+  res.render("login", {page: 'login'});
 });
 
 //handle login logic

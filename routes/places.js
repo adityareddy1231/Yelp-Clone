@@ -11,7 +11,8 @@ router.get("/", function(req, res) {
     } else {
       res.render("places/index", {
         places: allPlaces,
-        currentUser: req.user
+        currentUser: req.user,
+        page: 'places'
       });
     }
   });
