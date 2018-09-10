@@ -51,8 +51,10 @@ router.post("/", middleware.checkLoggedIn, function(req, res) {
   //Passing data to database.
   Place.create(newPlace, function(err, justCreatedPlace) {
     if (err) {
+      req.flash("error", "Something went wrong!");
       console.log(err);
     } else {
+      req.flash("success", "Successfully added a new place!");
       res.redirect("/places");
     }
   });
@@ -63,8 +65,9 @@ router.post("/", middleware.checkLoggedIn, function(req, res) {
 router.get("/:id", function(req, res) {
   //find place by id and populate comments
   Place.findById(req.params.id).populate("comments").exec(function(err, foundPlace) {
-    if (err) {
-      console.log(err);
+    if (err || !foundPlace) {
+      req.flash("error", "Place not found in the database");
+      res.redirect("back");
     } else {
       res.render("places/show", {
         place: foundPlace
@@ -76,9 +79,14 @@ router.get("/:id", function(req, res) {
 //EDIT - campground route
 router.get("/:id/edit", middleware.checkPlaceOwnership, function(req, res) {
   Place.findById(req.params.id, function(err, foundPlace) {
-    res.render("places/edit", {
-      place: foundPlace
-    });
+    if (err || !foundPlace) {
+      req.flash("error", "Place not found in the database");
+      res.redirect("back");
+    } else {
+        res.render("places/edit", {
+        place: foundPlace
+      });
+    }
   });
 });
 
@@ -86,8 +94,10 @@ router.get("/:id/edit", middleware.checkPlaceOwnership, function(req, res) {
 router.put("/:id", middleware.checkPlaceOwnership, function(req, res) {
   Place.findByIdAndUpdate(req.params.id, req.body.place, function(err, updatedPlace) {
     if (err) {
+      req.flash("error", "Something went wrong!");
       res.redirect("/places");
     } else {
+      req.flash("success", "Successfully edited place details!");
       res.redirect("/places/" + updatedPlace._id);
     }
   });
@@ -97,8 +107,10 @@ router.put("/:id", middleware.checkPlaceOwnership, function(req, res) {
 router.delete("/:id", middleware.checkPlaceOwnership, function(req, res) {
   Place.findByIdAndRemove(req.params.id, function(err) {
     if (err) {
-      console.log(err);
+      req.flash("error", "Something went wrong!");
+      res.redirect("/places");
     } else {
+      req.flash("success", "Successfully deleted the place!");
       res.redirect("/places");
     }
   });
