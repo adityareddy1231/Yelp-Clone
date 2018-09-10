@@ -35,6 +35,7 @@ router.post("/", middleware.checkLoggedIn, function(req, res) {
 
   //Getting data from form.
   var placeName = req.body.name;
+  var placePrice = req.body.price;
   var placeImage = req.body.image;
   var placeDescription = req.body.description;
   var author = {
@@ -43,6 +44,7 @@ router.post("/", middleware.checkLoggedIn, function(req, res) {
   };
   var newPlace = {
     name: placeName,
+    price: placePrice,
     image: placeImage,
     description: placeDescription,
     author: author
