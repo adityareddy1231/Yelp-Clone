@@ -1,6 +1,7 @@
 var express = require("express"),
   app = express(),
   bodyParser = require("body-parser"),
+  flash = require("connect-flash"),
   mongoose = require("mongoose"),
   passport = require('passport'),
   LocalStrategy = require('passport-local'),
@@ -23,10 +24,8 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
+app.use(flash());
 app.set("view engine", "ejs");
-
-//seeding the database
-// seedDB();
 
 //Passport Configuration
 app.use(session({

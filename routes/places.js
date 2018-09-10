@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var Place = require("../models/places");
+var middleware = require("../middleware");
 
 //INDEX - Show all places.
 router.get("/", function(req, res) {
@@ -17,7 +18,7 @@ router.get("/", function(req, res) {
 });
 
 //NEW - Show form to create new place.
-router.get("/new", checkLoggedIn, function(req, res) {
+router.get("/new", middleware.checkLoggedIn, function(req, res) {
   Place.findById(req.params.id).populate("comments").exec(function(err, foundPlace) {
     if (err) {
       res.redirect("/places");
@@ -30,7 +31,7 @@ router.get("/new", checkLoggedIn, function(req, res) {
 });
 
 //CREATE - Add new place to database.
-router.post("/", checkLoggedIn, function(req, res) {
+router.post("/", middleware.checkLoggedIn, function(req, res) {
 
   //Getting data from form.
   var placeName = req.body.name;
@@ -73,7 +74,7 @@ router.get("/:id", function(req, res) {
 });
 
 //EDIT - campground route
-router.get("/:id/edit", checkPlaceOwnership, function(req, res) {
+router.get("/:id/edit", middleware.checkPlaceOwnership, function(req, res) {
   Place.findById(req.params.id, function(err, foundPlace) {
     res.render("places/edit", {
       place: foundPlace
@@ -82,7 +83,7 @@ router.get("/:id/edit", checkPlaceOwnership, function(req, res) {
 });
 
 //Update campground route
-router.put("/:id", checkPlaceOwnership, function(req, res) {
+router.put("/:id", middleware.checkPlaceOwnership, function(req, res) {
   Place.findByIdAndUpdate(req.params.id, req.body.place, function(err, updatedPlace) {
     if (err) {
       res.redirect("/places");
@@ -93,7 +94,7 @@ router.put("/:id", checkPlaceOwnership, function(req, res) {
 });
 
 //Destroy campground route
-router.delete("/:id", checkPlaceOwnership, function(req, res) {
+router.delete("/:id", middleware.checkPlaceOwnership, function(req, res) {
   Place.findByIdAndRemove(req.params.id, function(err) {
     if (err) {
       console.log(err);
@@ -102,31 +103,5 @@ router.delete("/:id", checkPlaceOwnership, function(req, res) {
     }
   });
 });
-
-function checkLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-}
-
-function checkPlaceOwnership(req, res, next) {
-  if (req.isAuthenticated()) {
-    Place.findById(req.params.id, function(err, foundPlace) {
-      if (err) {
-        res.redirect("back");
-      } else {
-        //check user ownership of place
-        if (foundPlace.author.id.equals(req.user._id)) {
-          next();
-        } else {
-          res.redirect("back");
-        }
-      }
-    });
-  } else {
-    res.redirect("back");
-  }
-}
 
 module.exports = router;
