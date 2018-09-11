@@ -2,6 +2,16 @@ var express = require("express");
 var router = express.Router();
 var Place = require("../models/places");
 var middleware = require("../middleware");
+var NodeGeocoder = require('node-geocoder');
+
+var options = {
+  provider: 'google',
+  httpAdapter: 'https',
+  apiKey: process.env.GEOCODER_API_KEY,
+  formatter: null
+};
+
+var geocoder = NodeGeocoder(options);
 
 //INDEX - Show all places.
 router.get("/", function(req, res) {
@@ -43,25 +53,36 @@ router.post("/", middleware.checkLoggedIn, function(req, res) {
     id: req.user._id,
     username: req.user.username
   };
-  var newPlace = {
-    name: placeName,
-    price: placePrice,
-    image: placeImage,
-    description: placeDescription,
-    author: author
-  };
 
-  //Passing data to database.
-  Place.create(newPlace, function(err, justCreatedPlace) {
-    if (err) {
-      req.flash("error", "Something went wrong!");
-      console.log(err);
-    } else {
-      req.flash("success", "Successfully added a new place!");
-      res.redirect("/places");
+  geocoder.geocode(req.body.location, function(err, data) {
+    if (err || !data.length) {
+      req.flash('error', 'Invalid address');
+      return res.redirect('back');
     }
+    var lat = data[0].latitude;
+    var lng = data[0].longitude;
+    var location = data[0].formattedAddress;
+    var newPlace = {
+      name: placeName,
+      price: placePrice,
+      image: placeImage,
+      description: placeDescription,
+      author: author,
+      location: location,
+      lat: lat,
+      lng: lng
+    };
+    // Create a new campground and save to DB
+    Place.create(newPlace, function(err, justCreatedPlace) {
+      if (err) {
+        req.flash("error", "Something went wrong!");
+        console.log(err);
+      } else {
+        req.flash("success", "Successfully added a new place!");
+        res.redirect("/places");
+      }
+    });
   });
-
 });
 
 //SHOW - Shows more info about one place.
@@ -86,7 +107,7 @@ router.get("/:id/edit", middleware.checkPlaceOwnership, function(req, res) {
       req.flash("error", "Place not found in the database");
       res.redirect("back");
     } else {
-        res.render("places/edit", {
+      res.render("places/edit", {
         place: foundPlace
       });
     }
@@ -95,14 +116,23 @@ router.get("/:id/edit", middleware.checkPlaceOwnership, function(req, res) {
 
 //Update campground route
 router.put("/:id", middleware.checkPlaceOwnership, function(req, res) {
-  Place.findByIdAndUpdate(req.params.id, req.body.place, function(err, updatedPlace) {
-    if (err) {
-      req.flash("error", "Something went wrong!");
-      res.redirect("/places");
-    } else {
-      req.flash("success", "Successfully edited place details!");
-      res.redirect("/places/" + updatedPlace._id);
+  geocoder.geocode(req.body.location, function(err, data) {
+    if (err || !data.length) {
+      req.flash('error', 'Invalid address');
+      return res.redirect('back');
     }
+    req.body.place.lat = data[0].latitude;
+    req.body.place.lng = data[0].longitude;
+    req.body.place.location = data[0].formattedAddress;
+    Place.findByIdAndUpdate(req.params.id, req.body.place, function(err, updatedPlace) {
+      if (err) {
+        req.flash("error", "Something went wrong!");
+        res.redirect("/places");
+      } else {
+        req.flash("success", "Successfully edited place details!");
+        res.redirect("/places/" + updatedPlace._id);
+      }
+    });
   });
 });
 

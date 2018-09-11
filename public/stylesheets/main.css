@@ -10,3 +10,9 @@
   display: inline;
   float: right;
 }
+
+/* Google Maps */
+#map {
+    height: 400px;
+    width: 100%;
+}
