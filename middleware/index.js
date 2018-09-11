@@ -12,7 +12,7 @@ middlewareObj.checkPlaceOwnership = function(req, res, next){
         res.redirect("back");
       } else {
         //check user ownership of place
-        if (foundPlace.author.id.equals(req.user._id)) {
+        if (foundPlace.author.id.equals(req.user._id) || req.user.isAdmin) {
           next();
         } else {
           req.flash("error", "You do not have permission to do that!");
@@ -34,7 +34,7 @@ middlewareObj.checkCommentOwnership = function(req, res, next){
         res.redirect("back");
       } else {
         //check user ownership of comment
-        if (foundComment.author.id.equals(req.user._id)) {
+        if (foundComment.author.id.equals(req.user._id) || req.user.isAdmin) {
           next();
         } else {
           req.flash("error", "You do not have permission to do that!");
