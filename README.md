@@ -2,25 +2,20 @@
 A simple yelp.com clone but for dogs!
 
 The following technologies and conventions were used and followed: -
-1) Added full CRUD functionality for places and comments.
-2) Express framework used with ejs templates and node.js on server side.
-3) Bootstrap used for CSS styling
-4) URLs updated to follow RESTful routes.
-5) Connect flash for flash messages
-6) passport for authentication
-7) MongoDB with mongoose as the database.
+1)  Added full CRUD functionality for places and comments for users. Admin has global CRUD functionality.
+2)  Node.js for server side operations.
+3)  Express framework used with ejs templates
+4)  Bootstrap used for CSS styling
+5)  URLs updated to follow RESTful routes.
+6)  Connect flash for flash messages
+7)  Passport for authentication
+8)  MongoDB with mongoose as the database.
+9)  Google Maps API for displaying location
+10) Google Places API to autocomplete location in address input.
+11) Multer and Cloudinary for image upload and serve.
+12) Moment.js used for time since created of posts and comments
 
 TO-DO
-1) Finish all flash message displays.
-2) User profile and admin profile
 3) Deploy to herouku
-4) add in places
-5) Display time since post was created with Moment JS 
-6) Google maps api connection with express for locations
-7) Dynamic costs
-8) Image upload with multer and cloudinary 
-9) Search
-10) landing page animation
-11) password reset
-12) UI Improvemenets
-13) pagination
+9) Implement search of places
+11) Add a password reset option for users.
