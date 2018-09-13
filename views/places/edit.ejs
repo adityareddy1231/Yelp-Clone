@@ -9,7 +9,7 @@
           </div>
           <div class="form-group">
             <label for="location">Location</label>
-            <input class="form-control" type="text" name="location" id="location" value="<%= place.location %>">
+            <input class="form-control" type="text" name="location" id="autocomplete" value="<%= place.location %>">
           </div>
           <div class="form-group">
             <label for="cost">Cost</label>
@@ -31,4 +31,8 @@
       </div>
     </div>
     <br><br>
+    <script>
+      var input = document.getElementById('autocomplete');
+      var autocomplete = new google.maps.places.Autocomplete(input);
+    </script>
   <% include ../partials/footer %>
