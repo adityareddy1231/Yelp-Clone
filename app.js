@@ -20,7 +20,8 @@ var placeRoutes = require('./routes/places'),
     commentRoutes = require('./routes/comments'),
     indexRoutes = require('./routes/index');
 
-mongoose.connect("mongodb://localhost:27017/zorros-yelp", { useNewUrlParser: true });
+// mongoose.connect("mongodb://localhost:27017/zorros-yelp", { useNewUrlParser: true });
+mongoose.connect("mongodb://adityareddy1231:Godlike123@ds257732.mlab.com:57732/zorros-yelp", { useNewUrlParser: true });
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -61,6 +62,6 @@ app.use("/places/:id/comments", commentRoutes);
 app.use(indexRoutes);
 
 //Start server on a port on locahost
-app.listen(1337, "127.0.0.1", function() {
+app.listen(process.env.PORT, process.env.IP, function() {
   console.log("Zorro's yelp server has started!");
 });
