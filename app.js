@@ -20,8 +20,8 @@ var placeRoutes = require('./routes/places'),
     commentRoutes = require('./routes/comments'),
     indexRoutes = require('./routes/index');
 
-// mongoose.connect("mongodb://localhost:27017/zorros-yelp", { useNewUrlParser: true });
-mongoose.connect("mongodb://adityareddy1231:Godlike123@ds257732.mlab.com:57732/zorros-yelp", { useNewUrlParser: true });
+//mongodb connect
+mongoose.connect(process.env.ZORROSYELPDATABASEURL, { useNewUrlParser: true });
 app.use(bodyParser.urlencoded({
   extended: true
 }));
