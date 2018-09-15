@@ -22,7 +22,7 @@ router.post("/register", function (req, res) {
       return res.render("register", {error: err.message});
     }
     passport.authenticate("local")(req, res, function() {
-      req.flash("success", "Welcome to Zorro's-Yelp" + user.username);
+      req.flash("success", "Welcome to Zorro's-Yelp " + user.username);
       res.redirect("/places");
     });
   });
