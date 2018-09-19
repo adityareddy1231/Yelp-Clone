@@ -3,7 +3,6 @@ var router = express.Router();
 var Place = require("../models/places");
 var middleware = require("../middleware");
 var NodeGeocoder = require('node-geocoder');
-var geocoder = NodeGeocoder(options);
 var multer = require('multer');
 
 var storage = multer.diskStorage({
@@ -38,6 +37,8 @@ var options = {
   apiKey: process.env.GEOCODER_API_KEY,
   formatter: null
 };
+
+var geocoder = NodeGeocoder(options);
 
 
 //INDEX - Show all places.
