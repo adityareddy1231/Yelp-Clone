@@ -1,5 +1,6 @@
 # Zorro's-Yelp
 A simple yelp.com clone but for dogs!
+Live App:- https://zorros-yelp.herokuapp.com/
 
 The following technologies and conventions were used and followed: -
 1)  Added full CRUD functionality for places and comments for users. Admin has global CRUD functionality.
@@ -14,8 +15,8 @@ The following technologies and conventions were used and followed: -
 10) Google Places API to autocomplete location in address input.
 11) Multer and Cloudinary for image upload and serve.
 12) Moment.js used for time since created of posts and comments
+13) Deployed to heroku.
 
 TO-DO
-3) Deploy to herouku
 9) Implement search of places
 11) Add a password reset option for users.
