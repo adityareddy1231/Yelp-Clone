@@ -21,7 +21,7 @@
             <%= place.description %>
           </p>
           <p>
-            <em>Submitted By <%= place.author.username %>, <%= moment(place.createdAt).fromNow() %><em>
+            <em>Submitted By <a href="/users/<%= place.author.id %>"><%= place.author.username %></a>, <%= moment(place.createdAt).fromNow() %><em>
           </p>
           <% if(currentUser && place.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
           <a href="/places/<%= place.id %>/edit" class="btn btn-xs btn-warning">Edit Place</a>

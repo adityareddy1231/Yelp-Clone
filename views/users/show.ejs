@@ -1,0 +1,26 @@
+<% include ../partials/header %>
+<div class="row">
+  <div class="col-md-4">
+    <h1><%= user.firstName %> <%= user.lastName %></h1>
+    <div class="thumbnail">
+      <img src="<%= user.avatar %>" alt="user profile image">
+      <div class="caption">
+        <a href="mailto:<%= user.email %>"><%= user.email %></a>
+      </div>
+    </div>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque dolores laboriosam molestias iure, ad perferendis ipsum voluptate ea culpa ipsam? Assumenda doloremque ad consequatur alias laboriosam, cum minus dicta deleniti.
+
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe, quia, consequuntur. Hic odio sunt, aliquam quaerat? Vel veniam molestias natus impedit, ipsum qui, fuga perspiciatis? Doloremque ratione maiores eveniet repellat.
+  </div>
+  <div class="col-md-8">
+    <h3>Places added by <%= user.username %></h3>
+    <ul>
+  <% places.forEach(function(place)) { %>
+    <li>
+    <a href="/places/<%= place.id %>"><%= place.name %></a>
+    </li>
+  <% }); %>
+  </ul>
+  </div>
+</div>
+<% include ../partials/footer %>
