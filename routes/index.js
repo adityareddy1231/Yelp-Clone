@@ -62,12 +62,14 @@ router.get("/users/:id", function(req, res){
       req.flash("Something went wrong");
       return res.redirect("/");
     }
+      console.log(foundUser);
       Place.find().where("author.id").equals(foundUser._id).exec(function (err, places) {
         if (err) {
           req.flash("Something went wrong");
           return res.redirect("/");
         }
       });
+      console.log(places);
       res.render("users/show", {user: foundUser, places: places});
   });
 });
