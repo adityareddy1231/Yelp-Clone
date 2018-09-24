@@ -68,9 +68,10 @@ router.get("/users/:id", function(req, res){
           req.flash("Something went wrong");
           return res.redirect("/");
         }
-      });
+
       console.log(places);
       res.render("users/show", {user: foundUser, places: places});
+      });
   });
 });
 
