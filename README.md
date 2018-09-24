@@ -16,7 +16,8 @@ The following technologies and conventions were used and followed: -
 11) Multer and Cloudinary for image upload and serve.
 12) Moment.js used for time since created of posts and comments
 13) Deployed to heroku.
+14) Added user profile feature
+15) Added password reset feature
 
 TO-DO
 9) Implement search of places
-11) Add a password reset option for users.
