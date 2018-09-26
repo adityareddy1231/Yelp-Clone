@@ -18,6 +18,7 @@ The following technologies and conventions were used and followed: -
 13) Deployed to heroku.
 14) Added user profile feature
 15) Added password reset feature
+16) Added 8 places to populate database
 
 TO-DO
 9) Implement search of places
